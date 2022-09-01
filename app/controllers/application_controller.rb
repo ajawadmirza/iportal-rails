@@ -29,6 +29,10 @@ class ApplicationController < ActionController::API
     render json: { error: "user account is not activated yet. please contact administrator to approve." }, status: :unauthorized unless @current_user&.activated
   end
 
+  def is_param_user_activated?
+    render json: { error: "user account should be activated to perform this operation." }, status: :unprocessable_entity unless @query_user&.activated
+  end
+
   def not_same_user?
     render json: { errors: 'you cannot apply this operation on your own profile.' }, status: :unprocessable_entity if @current_user == @query_user
   end

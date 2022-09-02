@@ -17,7 +17,11 @@ test:
 
 production:
   <<: *default
-  url: 'postgres://knxwiifglyywhv:e927d06c7580095681299359bb6d6d0d517ebaa29e2e768017513466c29a4c21@ec2-54-204-241-136.compute-1.amazonaws.com:5432/dauuih2umos9kg'
+  url: <%= ENV['PROD_DATABASE_URL'] %>
+  database: <%= ENV['PROD_DATABASE_NAME'] %>
+  password: <%= ENV['PROD_DATABASE_PASSWORD'] %>
+  username: <%= ENV['PROD_DATABASE_USERNAME'] %>
+  host: <%= ENV['PROD_DATABASE_HOST'] %>
 
 # For Docker based postgres database configuration
 # development:

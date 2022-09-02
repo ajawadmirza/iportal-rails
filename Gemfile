@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.6.6'
+ruby '3.1.1'
 
 # My custom gems
 gem 'jwt'
@@ -9,6 +9,9 @@ gem 'bcrypt', '~> 3.1.7'
 gem 'rack-cors', '~> 1.1', '>= 1.1.1'
 gem 'aws-sdk-s3'
 gem 'dotenv-rails'
+gem 'net-smtp', require: false
+gem 'net-imap', require: false
+gem 'net-pop', require: false
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
 gem 'rails', '~> 6.0.5', '>= 6.0.5.1'

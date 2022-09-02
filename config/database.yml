@@ -6,10 +6,10 @@ default: &default
 
 development:
   <<: *default
-  database: ddpqjt65a97271
-  password: 'e16b60b805407d3da65eaafc712cd9214780e7cfb2beed921b11959a1aa37450'
-  username: 'dzfrcqgalkxyit'
-  host: 'ec2-107-23-76-12.compute-1.amazonaws.com'
+  database: <%= ENV['DEV_DATABASE_NAME'] %>
+  password: <%= ENV['DEV_DATABASE_PASSWORD'] %>
+  username: <%= ENV['DEV_DATABASE_USERNAME'] %>
+  host: <%= ENV['DEV_DATABASE_HOST'] %>
 
 test:
   <<: *default
@@ -17,10 +17,7 @@ test:
 
 production:
   <<: *default
-  database: dauuih2umos9kg
-  password: 'e927d06c7580095681299359bb6d6d0d517ebaa29e2e768017513466c29a4c21'
-  username: 'knxwiifglyywhv'
-  host: ec2-54-204-241-136.compute-1.amazonaws.com
+  url: 'postgres://knxwiifglyywhv:e927d06c7580095681299359bb6d6d0d517ebaa29e2e768017513466c29a4c21@ec2-54-204-241-136.compute-1.amazonaws.com:5432/dauuih2umos9kg'
 
 # For Docker based postgres database configuration
 # development:

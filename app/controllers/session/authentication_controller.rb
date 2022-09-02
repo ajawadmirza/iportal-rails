@@ -11,7 +11,7 @@ class Session::AuthenticationController < ApplicationController
           time = Time.now + SESSION_TIME_OUT.seconds.to_i
           render json: { token: token, exp: time.strftime("%m-%d-%Y %H:%M"), email: @user.email, role: @user.role, activated?: @user.activated }, status: :ok
         else
-          render json: { error: 'unauthorized' }, status: :unauthorized
+          render json: { error: 'invalid username or password.' }, status: :unauthorized
         end
     end
 

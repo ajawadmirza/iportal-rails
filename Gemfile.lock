@@ -135,6 +135,7 @@ GEM
     nokogiri (1.13.8-x86_64-linux)
       racc (~> 1.4)
     pg (1.4.3)
+    public_suffix (5.0.0)
     puma (4.3.12)
       nio4r (~> 2.0)
     racc (1.6.0)
@@ -178,6 +179,9 @@ GEM
     timeout (0.3.0)
     tzinfo (2.0.5)
       concurrent-ruby (~> 1.0)
+    validate_url (1.0.15)
+      activemodel (>= 3.0.0)
+      public_suffix
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
@@ -203,6 +207,7 @@ DEPENDENCIES
   rack-cors (~> 1.1, >= 1.1.1)
   rails (~> 7.0.3.1)
   tzinfo-data
+  validate_url
 
 RUBY VERSION
    ruby 3.1.2p20

@@ -6,21 +6,23 @@ class Profile::AccessController < ApplicationController
     before_action :not_same_user?, only: [:change_user_activation, :change_user_role]
 
     def change_user_activation
-        begin
-            activation = params[:activation].to_s.casecmp('true') == 0
-            @query_user.update_attributes!(activated: activation)
-            render json: @query_user, except: [:password_digest], status: :ok
-        rescue Exception
-            render json: { error: @query_user.errors.full_messages }, status: :unprocessable_entity
-        end
+        activation = params[:activation].to_s.casecmp('true') == 0
+        @query_user.activated = activation
+        save_record
     end
 
     def change_user_role
-        begin
-            @query_user.update_attributes!(role: params[:role].to_s)
+        @query_user.role = params[:role].to_s
+        save_record
+    end
+
+    private
+
+    def save_record
+        if @query_user.save
             render json: @query_user, except: [:password_digest], status: :ok
-        rescue Exception
-            render json: { error: @query_user.errors.full_messages }, status: :unprocessable_entity
+        else
+            render json: { error: @query_user.errors.full_messages || e.message }, status: :unprocessable_entity
         end
     end
 end

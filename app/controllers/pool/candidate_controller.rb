@@ -5,7 +5,7 @@ class Pool::CandidateController < ApplicationController
 
     def index
         @candidates = Candidate.all
-        render json: { candidates: @candidates }, except: [:cv_key]
+        render json: { candidates: @candidates }
     end
 
     def create
@@ -15,7 +15,7 @@ class Pool::CandidateController < ApplicationController
             params = set_other_params(url: upload_result[:url], key: upload_result[:key])
             candidate = Candidate.new(candidate_params)
             if candidate.save
-                render json: candidate, except: [:cv_key]
+                render json: candidate
             else
                 FileHandler.delete_file(upload_result[:key])
                 render json: { errors: candidate.errors.full_messages }, status: :unprocessable_entity

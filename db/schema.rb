@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_09_01_175930) do
+ActiveRecord::Schema[7.0].define(version: 2022_09_04_110857) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -35,10 +35,25 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_01_175930) do
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
+  create_table "candidates", force: :cascade do |t|
+    t.string "name"
+    t.string "cv_url"
+    t.string "cv_key"
+    t.string "status"
+    t.string "stack"
+    t.string "referred_by"
+    t.string "experience_years"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id"
+    t.index ["user_id"], name: "index_candidates_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email"
     t.string "password_digest"
     t.string "role"
+    t.string "employee_id"
     t.boolean "activated"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

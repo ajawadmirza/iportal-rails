@@ -8,4 +8,8 @@ Rails.application.routes.draw do
     post 'activation/:id', to: 'access#change_user_activation'
     post 'role/:id', to: 'access#change_user_role'
   end
+
+  namespace :pool do
+    resources :candidate
+  end
 end

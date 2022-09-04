@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  cv_url: MyString
+  cv_key: MyString
+  status: MyString
+  stack: MyString
+
+two:
+  name: MyString
+  cv_url: MyString
+  cv_key: MyString
+  status: MyString
+  stack: MyString

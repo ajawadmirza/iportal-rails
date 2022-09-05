@@ -1,4 +1,7 @@
 SESSION_TIME_OUT = 3600.freeze
 SECRET_KEY = 'thepersioncatwithgreyhairs@2009'
-USER_ROLES = %w(1 2)
+USER_ROLES = %w(1 2 3)
+ADMIN_USER_ROLE = '1'
+PLATFORM_USER_ROLE = '2'
+MAINTAINER_USER_ROLE = '3'
 DEFAULT_CANDIDATE_STATUS = 'not interviewed'

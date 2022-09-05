@@ -22,7 +22,7 @@ class Profile::AccessController < ApplicationController
         if @query_user.save
             render json: @query_user, except: [:password_digest], status: :ok
         else
-            render json: { error: @query_user.errors.full_messages || e.message }, status: :unprocessable_entity
+            render json: { error: @query_user.errors.full_messages }, status: :unprocessable_entity
         end
     end
 end

@@ -12,4 +12,11 @@ Rails.application.routes.draw do
   namespace :pool do
     resources :candidate
   end
+
+  namespace :hiring do
+    get 'interview', to: 'interview#index'
+    post 'interview/:candidate_id', to: 'interview#create'
+    delete 'interview/:interview_id', to: 'interview#destroy'
+    post 'interview/:interview_id/add-interviewers', to: 'interview#add_interviewers'
+  end
 end

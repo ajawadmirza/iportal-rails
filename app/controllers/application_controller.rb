@@ -21,8 +21,12 @@ class ApplicationController < ActionController::API
     end
   end
 
+  def is_maintainer?
+    render json: { error: "user doesn't have enough rights to access." }, status: :unauthorized unless @current_user.role == ADMIN_USER_ROLE || @current_user.role == MAINTAINER_USER_ROLE
+  end
+  
   def is_admin?
-    render json: { error: "user doesn't have enough rights to access." }, status: :unauthorized unless @current_user.role == '1'
+    render json: { error: "user doesn't have enough rights to access." }, status: :unauthorized unless @current_user.role == ADMIN_USER_ROLE
   end
 
   def is_activated?

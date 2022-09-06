@@ -18,5 +18,9 @@ Rails.application.routes.draw do
     post 'interview/:candidate_id', to: 'interview#create'
     delete 'interview/:interview_id', to: 'interview#destroy'
     post 'interview/:interview_id/add-interviewers', to: 'interview#add_interviewers'
+
+    get 'feedback', to: 'feedback#index'
+    post 'feedback/:interview_id', to: 'feedback#create'
+    delete 'feedback/:feedback_id', to: 'feedback#destroy'
   end
 end

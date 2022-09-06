@@ -5,13 +5,13 @@ class Session::AuthenticationController < ApplicationController
     before_action :is_activated?, except: :login
 
     def login
-        @user = User.find_by_email(params[:email])
-        if @user&.authenticate(params[:password])
-          token = JsonWebToken.encode(user_id: @user.id)
+        @current_user = User.find_by_email(params[:email])
+        if @current_user&.authenticate(params[:password])
+          token = JsonWebToken.encode(user_id: @current_user.id)
           time = Time.now + SESSION_TIME_OUT.seconds.to_i
-          render json: { token: token, exp: time.strftime("%m-%d-%Y %H:%M"), email: @user.email, role: @user.role, activated?: @user.activated }, status: :ok
+          render json: @current_user&.response_hash.merge({ token: token, exp: time.strftime("%m-%d-%Y %H:%M") }), status: :ok
         else
-          render json: { error: 'invalid username or password.' }, status: :unauthorized
+          render json: { error: INVALID_CREDENTIALS_MESSAGE }, status: :unauthorized
         end
     end
 

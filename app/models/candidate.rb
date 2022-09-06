@@ -6,6 +6,18 @@ class Candidate < ApplicationRecord
     validates :cv_key, presence: true, length: { minimum: 3, maximum: 40 }
     validates :status, presence: true, length: { minimum: 3, maximum: 40 }
     validates :stack, presence: true, length: { minimum: 3, maximum: 40 }
-    validates :referred_by, presence: true, length: { minimum: 3, maximum: 40 }
     validates :experience_years, presence: true, :numericality => { :only_integer => true, less_than_or_equal_to: 100 }
+
+    def response_hash
+        {
+            id: self.id,
+            name: self.name,
+            cv_url: self.cv_url,
+            cv_key: self.cv_key,
+            status: self.status,
+            stack: self.stack,
+            referred_by: self.user&.response_hash,
+            experience_years: self.experience_years
+        }
+    end
 end

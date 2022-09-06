@@ -10,4 +10,14 @@ class User < ApplicationRecord
 
     attribute :activated, :boolean, default: false
     attribute :role, :string, default: '2'
+
+    def response_hash
+        {
+            id: self.id,
+            email: self.email,
+            role: self.role,
+            employee_id: self.employee_id,
+            activated: self.activated
+        }
+    end
 end

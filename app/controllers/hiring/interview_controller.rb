@@ -3,24 +3,17 @@ class Hiring::InterviewController < ApplicationController
     before_action :is_maintainer?
 
     def index
-        all_interviews = { interviews: [] }
-        Interview.all.each do |interview|
-            interview_obj = interview.with_feedback_and_interviewers
-            all_interviews[:interviews] << interview_obj
-        end
-        render json: all_interviews
+        @interviews = []
+        Interview.all.each_entry{ |interview| @interviews << interview&.with_feedback_and_interviewers}
+        render json: { interviews: @interviews }
     end
 
     def create
         begin
             params[:candidate] = Candidate.find(params[:candidate_id].to_i).id
             interview = Interview.new(interview_params)
-            interview.users = User.where(:id => params[:interviewers])
-            if interview.save
-                render json: interview
-            else
-                render json: { errors: interview.errors.full_messages }, status: :unprocessable_entity
-            end
+            interview.users = User.where(:id => params[:interviewers], :activated => true)
+            save_object(interview)
         rescue => e
             render json: { errors: e.message }, status: :internal_server_error
         end
@@ -29,12 +22,7 @@ class Hiring::InterviewController < ApplicationController
     def destroy
         begin
             interview = Interview.find(params[:interview_id].to_i)
-            result = interview.destroy
-            if result
-                render json: { message: 'interview is successfully deleted' }, status: :ok
-            else
-                render json: { errors: interview.errors.full_messages }, status: :unprocessable_entity
-            end
+            delete_object(interview)
         rescue => e
             render json: { errors: e.message }, status: :internal_server_error
         end

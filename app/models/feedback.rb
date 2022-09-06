@@ -6,10 +6,22 @@ class Feedback < ApplicationRecord
     validates :remarks, presence: true, length: { minimum: 3, maximum: 300 }
     validates :file_url, presence: true, length: { minimum: 3, maximum: 500 }
     validates :file_key, presence: true, length: { minimum: 3, maximum: 40 }
+    validates :interview_id, presence: true, uniqueness: true
+
+    def response_hash
+        {
+            id: self.id,
+            status: self.status,
+            remarks: self.remarks,
+            file_url: self.file_url,
+            file_key: self.file_key,
+            interview: self.interview&.with_interviewers_and_candidate
+        }
+    end
 
     def with_interview_and_candidate_details
-        feedback = self.attributes
-        feedback['interview'] = self.interview.with_interviewers_and_candidate
+        feedback = self.response_hash.except(:interview)
+        feedback['interview'] = self.interview&.with_interviewers_and_candidate
         feedback
     end
 end

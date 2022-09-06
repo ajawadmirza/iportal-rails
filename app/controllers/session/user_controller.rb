@@ -6,26 +6,18 @@ class Session::UserController < ApplicationController
     before_action :not_same_user?, only: [:destroy]
 
     def index
-        @users = User.all
-        render json: { users: @users }, except: [:password_digest]
+        @users = []
+        User.all.each_entry{ |user| @users << user&.response_hash}
+        render json: { users: @users }
     end
 
     def create
         user = User.new(user_params)
-        if user.save
-            render json: user, except: [:password_digest]
-        else
-            render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
-        end
+        save_object(user)
     end
 
     def destroy
-        result = @query_user.destroy
-        if result
-            render json: { message: 'user is successfully deleted' }, status: :ok
-        else
-            render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
-        end
+        delete_object(@query_user)
     end
 
     private

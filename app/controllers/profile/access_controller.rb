@@ -20,7 +20,7 @@ class Profile::AccessController < ApplicationController
 
     def save_record
         if @query_user.save
-            render json: @query_user, except: [:password_digest], status: :ok
+            render json: @query_user&.response_hash, status: :ok
         else
             render json: { error: @query_user.errors.full_messages }, status: :unprocessable_entity
         end

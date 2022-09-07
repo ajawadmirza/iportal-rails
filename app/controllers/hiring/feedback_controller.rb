@@ -41,6 +41,13 @@ class Hiring::FeedbackController < ApplicationController
         end
     end
 
+    def given_by_user
+        user_feedbacks = []
+        feedbacks = Feedback.where(:user_id => @current_user.id)
+        feedbacks.each_entry{ |feedback| user_feedbacks << feedback&.with_interview_and_candidate_details}
+        render json: { feedbacks: user_feedbacks }
+    end
+
     private
 
     def feedback_params

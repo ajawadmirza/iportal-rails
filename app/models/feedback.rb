@@ -15,7 +15,8 @@ class Feedback < ApplicationRecord
             remarks: self.remarks,
             file_url: self.file_url,
             file_key: self.file_key,
-            interview: self.interview&.with_interviewers_and_candidate
+            interview: self.interview&.with_interviewers_and_candidate,
+            given_by: self.user&.response_hash
         }
     end
 

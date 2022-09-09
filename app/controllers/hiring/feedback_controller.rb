@@ -2,7 +2,7 @@ require 's3_file_handler'
 
 class Hiring::FeedbackController < ApplicationController
     before_action :is_activated?
-    before_action :is_maintainer?, except: [:create, :destroy]
+    before_action :is_maintainer?, except: [:create, :destroy, :given_by_self_user]
 
     def index
         @feedbacks = []
@@ -41,14 +41,22 @@ class Hiring::FeedbackController < ApplicationController
         end
     end
 
-    def given_by_user
-        user_feedbacks = []
-        feedbacks = Feedback.where(:user_id => @current_user.id)
-        feedbacks.each_entry{ |feedback| user_feedbacks << feedback&.with_interview_and_candidate_details}
-        render json: { feedbacks: user_feedbacks }
+    def given_by_self_user
+        render_feedback_for_user(@current_user.id)
+    end
+
+    def given_by_query_user
+        render_feedback_for_user(params[:user_id])
     end
 
     private
+
+    def render_feedback_for_user(user_id)
+        user_feedbacks = []
+        feedbacks = Feedback.where(:user_id => user_id)
+        feedbacks.each_entry{ |feedback| user_feedbacks << feedback&.with_interview_and_candidate_details }
+        render json: { feedbacks: user_feedbacks }
+    end
 
     def feedback_params
         params.permit(:status, :remarks, :file_url, :file_key, :interview_id, :user_id)

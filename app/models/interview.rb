@@ -36,4 +36,11 @@ class Interview < ApplicationRecord
         interview_obj[:candidate] = self.candidate&.response_hash
         interview_obj
     end
+
+    def with_feedback_interviewers_and_candidate
+        interview_obj = with_interviewiers.except(:candidate_id)
+        interview_obj[:candidate] = self.candidate&.response_hash
+        interview_obj[:feedback] = self.feedback&.response_hash
+        interview_obj
+    end
 end

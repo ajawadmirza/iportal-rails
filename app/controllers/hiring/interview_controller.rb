@@ -1,6 +1,6 @@
 class Hiring::InterviewController < ApplicationController
     before_action :is_activated?
-    before_action :is_maintainer?
+    before_action :is_maintainer?, except: :for_self_user
 
     def index
         @interviews = []
@@ -42,7 +42,21 @@ class Hiring::InterviewController < ApplicationController
         end
     end
 
+    def for_self_user
+        render_interviews_by_user(@current_user)
+    end
+
+    def for_query_user
+        render_interviews_by_user(User.where(:id => params[:user_id]).limit(1).first)
+    end
+
     private
+
+    def render_interviews_by_user(user)
+        user_interviews = []
+        user&.interviews&.each_entry{ |interview| user_interviews << interview&.with_feedback_interviewers_and_candidate }
+        render json: { interviews: user_interviews }
+    end
 
     def interview_params
         params.permit(:scheduled_time, :location, :url, :user_ids, :candidate_id)

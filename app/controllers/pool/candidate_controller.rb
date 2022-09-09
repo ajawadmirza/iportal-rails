@@ -5,7 +5,7 @@ class Pool::CandidateController < ApplicationController
 
     def index
         @candidates = []
-        Candidate.all.each_entry{ |candidate| @candidates << candidate&.response_hash}
+        Candidate.all.each_entry{ |candidate| @candidates << candidate&.with_interviews_interviewers_and_feedback}
         render json: { candidates: @candidates }
     end
 
@@ -22,7 +22,22 @@ class Pool::CandidateController < ApplicationController
         end
     end
 
+    def referrals_by_self_user
+        render_candidates_by_user(@current_user.id)
+    end
+
+    def referrals_by_query_user
+        render_candidates_by_user(params[:user_id])
+    end
+
     private
+
+    def render_candidates_by_user(user_id)
+        referrals = []
+        candidates = Candidate.where(:user_id => user_id)
+        candidates.each_entry{ |candidate| referrals << candidate&.with_interviews_interviewers_and_feedback }
+        render json: { candidates: referrals }
+    end
     
     def candidate_params
         params.permit(:name, :experience_years, :stack, :cv_url, :cv_key, :status, :user_id)

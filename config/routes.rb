@@ -7,10 +7,14 @@ Rails.application.routes.draw do
   namespace :profile do
     post 'activation/:id', to: 'access#change_user_activation'
     post 'role/:id', to: 'access#change_user_role'
+    get 'user', to: 'user#my_profile'
+    get 'user/:user_id', to: 'user#other_profile'
   end
 
   namespace :pool do
     resources :candidate
+    get 'referrals', to: 'candidate#referrals_by_self_user'
+    get 'referrals/:user_id', to: 'candidate#referrals_by_query_user'
   end
 
   namespace :hiring do
@@ -18,10 +22,13 @@ Rails.application.routes.draw do
     post 'interview/:candidate_id', to: 'interview#create'
     delete 'interview/:interview_id', to: 'interview#destroy'
     post 'interview/:interview_id/add-interviewers', to: 'interview#add_interviewers'
+    get 'interview/user', to: 'interview#for_self_user'
+    get 'interview/user/:user_id', to: 'interview#for_query_user'
 
     get 'feedback', to: 'feedback#index'
     post 'feedback/:interview_id', to: 'feedback#create'
     delete 'feedback/:feedback_id', to: 'feedback#destroy'
-    get 'feedback/user', to: 'feedback#given_by_user'
+    get 'feedback/user', to: 'feedback#given_by_self_user'
+    get 'feedback/user/:user_id', to: 'feedback#given_by_query_user'
   end
 end

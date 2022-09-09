@@ -15,13 +15,12 @@ class Feedback < ApplicationRecord
             remarks: self.remarks,
             file_url: self.file_url,
             file_key: self.file_key,
-            interview: self.interview&.with_interviewers_and_candidate,
             given_by: self.user&.response_hash
         }
     end
 
     def with_interview_and_candidate_details
-        feedback = self.response_hash.except(:interview)
+        feedback = self.response_hash
         feedback['interview'] = self.interview&.with_interviewers_and_candidate
         feedback
     end

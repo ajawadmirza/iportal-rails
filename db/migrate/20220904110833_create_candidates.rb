@@ -4,7 +4,6 @@ class CreateCandidates < ActiveRecord::Migration[7.0]
       t.string :name
       t.string :cv_url
       t.string :cv_key
-      t.string :status
       t.string :stack
       t.string :experience_years
 

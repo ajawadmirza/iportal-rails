@@ -74,7 +74,7 @@ class Pool::CandidateController < ApplicationController
     private
 
     def candidate_filter_params
-        params.slice(:id, :name, :cv_url, :status, :stack, :experience_years, :total_interviews, :referred_by)
+        params.slice(:id, :name, :cv_url, :stack, :experience_years, :total_interviews, :referred_by)
     end
 
     def upload_and_set_urls(file_data)
@@ -92,11 +92,10 @@ class Pool::CandidateController < ApplicationController
     end
     
     def candidate_params
-        params.permit(:name, :experience_years, :stack, :cv_url, :cv_key, :status, :user_id)
+        params.permit(:name, :experience_years, :stack, :cv_url, :cv_key, :user_id)
     end
 
     def set_candidate_params(options = {})
-        params[:status] = DEFAULT_CANDIDATE_STATUS
         params[:user_id] = @current_user.id
         params
     end

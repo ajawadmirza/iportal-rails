@@ -4,12 +4,10 @@ one:
   name: MyString
   cv_url: MyString
   cv_key: MyString
-  status: MyString
   stack: MyString
 
 two:
   name: MyString
   cv_url: MyString
   cv_key: MyString
-  status: MyString
   stack: MyString

@@ -39,7 +39,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_06_102357) do
     t.string "name"
     t.string "cv_url"
     t.string "cv_key"
-    t.string "status"
     t.string "stack"
     t.string "experience_years"
     t.datetime "created_at", null: false

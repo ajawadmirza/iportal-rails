@@ -4,7 +4,6 @@ USER_ROLES = %w(1 2 3)
 ADMIN_USER_ROLE = '1'
 PLATFORM_USER_ROLE = '2'
 MAINTAINER_USER_ROLE = '3'
-DEFAULT_CANDIDATE_STATUS = 'not interviewed'
 
 # Messages
 INVALID_CREDENTIALS_MESSAGE = 'invalid username or password.'

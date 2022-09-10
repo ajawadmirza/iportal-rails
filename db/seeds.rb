@@ -14,3 +14,8 @@ interview2 = Interview.create(scheduled_time: '08/10/2019 05:10AM', location: 'o
 
 feedback1 = Feedback.create(status: 'rejected', remarks: 'not enough skills', file_url: 'https://albantsh.co.uk/feedback-its-what-happens-in-the-classroom-that-counts/', file_key: 'feedback-its', user: user4, interview: interview2)
 feedback2 = Feedback.create(status: 'recommended', remarks: 'good angular skills', file_url: 'https://albantsh.co.uk/feedback-its-what-happens-in-the-classroom-that-counts/', file_key: 'feedback-its', user: user1, interview: interview1)
+
+
+# common data
+question1 = Question.create(course: 'angular', description: 'Explain end-end flow of angular app working', answer: 'runs from app module and goes to components', user: user1)
+question2 = Question.create(course: 'ruby', description: 'How to perform testing in ruby', answer: 'use rspec and minitest gems', user: user2)

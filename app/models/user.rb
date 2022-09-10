@@ -9,6 +9,7 @@ class User < ApplicationRecord
 
     has_secure_password
     has_many :candidates
+    has_many :questions
     has_and_belongs_to_many :interviews
 
     validates :email, uniqueness: true, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }

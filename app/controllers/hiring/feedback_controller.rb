@@ -2,7 +2,7 @@ require 's3_file_handler'
 
 class Hiring::FeedbackController < ApplicationController
     before_action :is_activated?
-    before_action :is_maintainer?, except: [:create, :destroy, :given_by_self_user]
+    before_action :is_maintainer?, except: [:create, :destroy, :given_by_self_user, :update]
 
     def index
         @feedbacks = []
@@ -24,6 +24,25 @@ class Hiring::FeedbackController < ApplicationController
             end
         rescue => e
             FileHandler.delete_file(upload_result[:key]) if upload_result[:key]
+            render json: { errors: e.message }, status: :internal_server_error
+        end
+    end
+
+    def update
+        begin
+            feedback = Feedback.find(params[:id])
+            if user_permission_for_feedback?(feedback.interview)
+                if file_data = params[:file]
+                    FileHandler.delete_file(feedback&.file_key)
+                    upload_result = FileHandler.upload_file(file_data[:content_type], file_data[:extension], file_data[:file])
+                end
+                params = set_feedback_params(upload_result || {})
+                update_object(feedback, feedback_params.except(:interview_id))
+            else
+                render json: { error: INVALID_ACCESS_RIGHTS_MESSAGE }, status: :unauthorized
+            end
+        rescue => e
+            FileHandler.delete_file(params[:file_key]) if params && params[:file_key]
             render json: { errors: e.message }, status: :internal_server_error
         end
     end
@@ -63,10 +82,10 @@ class Hiring::FeedbackController < ApplicationController
     end
 
     def set_feedback_params(options = {})
-        params[:file_url] = options[:url]
-        params[:file_key] = options[:key]
+        params[:file_url] = options[:url] if options[:url]
+        params[:file_key] = options[:key] if options[:key]
         params[:user_id] = @current_user.id
-        params[:interview_id] = Interview.find(params[:interview_id]).id
+        params[:interview_id] = Interview.find(params[:interview_id]).id if params && params[:interview_id]
         params
     end
 

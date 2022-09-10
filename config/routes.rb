@@ -28,6 +28,7 @@ Rails.application.routes.draw do
 
     get 'feedback', to: 'feedback#index'
     post 'feedback/:interview_id', to: 'feedback#create'
+    patch 'feedback/:id', to: 'feedback#update'
     delete 'feedback/:feedback_id', to: 'feedback#destroy'
     get 'feedback/user', to: 'feedback#given_by_self_user'
     get 'feedback/user/:user_id', to: 'feedback#given_by_query_user'

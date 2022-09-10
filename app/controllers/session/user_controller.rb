@@ -7,7 +7,7 @@ class Session::UserController < ApplicationController
 
     def index
         @users = []
-        User.all.each_entry{ |user| @users << user&.response_hash}
+        User.filter(user_filter_params).each_entry{ |user| @users << user&.response_hash}
         render json: { users: @users }
     end
 
@@ -23,5 +23,9 @@ class Session::UserController < ApplicationController
     private
     def user_params
         params.permit(:email, :password, :employee_id)
+    end
+    
+    def user_filter_params
+        params.slice(:id, :activated, :email, :role, :employee_id)
     end
 end

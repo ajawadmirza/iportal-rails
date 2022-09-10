@@ -6,7 +6,7 @@ class Hiring::FeedbackController < ApplicationController
 
     def index
         @feedbacks = []
-        Feedback.all.each_entry{ |feedback| @feedbacks << feedback&.with_interview_and_candidate_details}
+        Feedback.filter(feedback_filter_params).each_entry{ |feedback| @feedbacks << feedback&.with_interview_and_candidate_details}
         render json: { feedbacks: @feedbacks }
     end
 
@@ -79,9 +79,13 @@ class Hiring::FeedbackController < ApplicationController
 
     private
 
+    def feedback_filter_params
+        params.slice(:id, :status, :remarks, :file_url)
+    end
+
     def render_feedback_for_user(user_id)
         user_feedbacks = []
-        feedbacks = Feedback.where(:user_id => user_id)
+        feedbacks = Feedback.filter(feedback_filter_params).where(:user_id => user_id)
         feedbacks.each_entry{ |feedback| user_feedbacks << feedback&.with_interview_and_candidate_details }
         render json: { feedbacks: user_feedbacks }
     end

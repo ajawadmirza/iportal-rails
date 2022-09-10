@@ -1,4 +1,12 @@
 class User < ApplicationRecord
+    include Filterable
+
+    scope :filter_by_id, -> (id) { where('id = ?', id) }
+    scope :filter_by_activated, -> (activated) { where('activated = ?', activated) }
+    scope :filter_by_email, -> (email) { where('email like ?', "%#{email}%") }
+    scope :filter_by_role, -> (role) { where('role = ?', role) }
+    scope :filter_by_employee_id, -> (employee_id) { where('employee_id like ?', "%#{employee_id}%") }
+
     has_secure_password
     has_many :candidates
     has_and_belongs_to_many :interviews

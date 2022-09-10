@@ -4,7 +4,7 @@ class Hiring::InterviewController < ApplicationController
 
     def index
         @interviews = []
-        Interview.all.each_entry{ |interview| @interviews << interview&.with_feedback_and_interviewers}
+        Interview.filter(interview_filter_params).each_entry{ |interview| @interviews << interview&.with_feedback_and_interviewers}
         render json: { interviews: @interviews }
     end
 
@@ -71,9 +71,14 @@ class Hiring::InterviewController < ApplicationController
 
     private
 
+    def interview_filter_params
+        params.slice(:id, :scheduled_time, :location, :url, :has_feedback, :total_interviewers, :till, :from)
+    end
+
     def render_interviews_by_user(user)
         user_interviews = []
-        user&.interviews&.each_entry{ |interview| user_interviews << interview&.with_feedback_interviewers_and_candidate }
+        interviews = filter_records(user&.interviews, interview_filter_params)
+        interviews&.each_entry{ |interview| user_interviews << interview&.with_feedback_interviewers_and_candidate }
         render json: { interviews: user_interviews }
     end
 

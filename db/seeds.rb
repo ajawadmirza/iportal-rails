@@ -12,6 +12,5 @@ candidate3 = Candidate.create(name: 'Stuart Broad', cv_url: 'https://cdn-images.
 interview1 = Interview.create(scheduled_time: '08/10/2019 04:10AM', location: 'online', url: 'www.google.com', candidate: candidate1, users: [user1, user3])
 interview2 = Interview.create(scheduled_time: '08/10/2019 05:10AM', location: 'online', url: 'www.google.com', candidate: candidate1, users: [user3])
 
-#not working
-feedback1 = Feedback.create(status: 'rejected', remarks: 'not enough skills', file_url: 'https://albantsh.co.uk/feedback-its-what-happens-in-the-classroom-that-counts/', file_key: 'feedback-its-what-happens-in-the-classroom-that-counts', user: user4, interview: interview2)
-feedback2 = Feedback.create(status: 'recommended', remarks: 'good angular skills', file_url: 'https://albantsh.co.uk/feedback-its-what-happens-in-the-classroom-that-counts/', file_key: 'feedback-its-what-happens-in-the-classroom-that-counts', user: user1, interview: interview1)
+feedback1 = Feedback.create(status: 'rejected', remarks: 'not enough skills', file_url: 'https://albantsh.co.uk/feedback-its-what-happens-in-the-classroom-that-counts/', file_key: 'feedback-its', user: user4, interview: interview2)
+feedback2 = Feedback.create(status: 'recommended', remarks: 'good angular skills', file_url: 'https://albantsh.co.uk/feedback-its-what-happens-in-the-classroom-that-counts/', file_key: 'feedback-its', user: user1, interview: interview1)

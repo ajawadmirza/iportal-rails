@@ -5,7 +5,7 @@ class Pool::CandidateController < ApplicationController
 
     def index
         @candidates = []
-        Candidate.all.each_entry{ |candidate| @candidates << candidate&.with_interviews_interviewers_and_feedback}
+        Candidate.filter(candidate_filter_params).each_entry{ |candidate| @candidates << candidate&.with_interviews_interviewers_and_feedback}
         render json: { candidates: @candidates }
     end
 
@@ -73,6 +73,10 @@ class Pool::CandidateController < ApplicationController
 
     private
 
+    def candidate_filter_params
+        params.slice(:id, :name, :cv_url, :status, :stack, :experience_years, :total_interviews, :referred_by)
+    end
+
     def upload_and_set_urls(file_data)
         upload_result = FileHandler.upload_file(file_data[:content_type], file_data[:extension], file_data[:file])
         params[:cv_url] = upload_result[:url]
@@ -82,7 +86,7 @@ class Pool::CandidateController < ApplicationController
 
     def render_candidates_by_user(user_id)
         referrals = []
-        candidates = Candidate.where(:user_id => user_id)
+        candidates = Candidate.filter(candidate_filter_params).where(:user_id => user_id)
         candidates.each_entry{ |candidate| referrals << candidate&.with_interviews_interviewers_and_feedback }
         render json: { candidates: referrals }
     end

@@ -1,6 +1,13 @@
 class Feedback < ApplicationRecord
+    include Filterable
+
     belongs_to :interview
     belongs_to :user
+
+    scope :filter_by_id, -> (id) { where('id = ?', id) }
+    scope :filter_by_status, -> (status) { where('status like ?', "%#{status}%") }
+    scope :filter_by_remarks, -> (remarks) { where('remarks like ?', "%#{remarks}%") }
+    scope :filter_by_file_url, -> (file_url) { where('file_url like ?', "%#{file_url}%") }
 
     validates :status, presence: true, length: { minimum: 3, maximum: 15 }
     validates :remarks, presence: true, length: { minimum: 3, maximum: 300 }

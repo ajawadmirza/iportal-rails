@@ -1,7 +1,29 @@
 class Interview < ApplicationRecord
+    include Filterable
+
     belongs_to :candidate
     has_and_belongs_to_many :users
     has_one :feedback
+
+    scope :filter_by_id, -> (id) { where('id = ?', id) }
+    scope :filter_by_scheduled_time, -> (scheduled_time) { where('scheduled_time like ?', "%#{scheduled_time}%") }
+    scope :filter_by_location, -> (location) { where('location like ?', "%#{location}%") }
+    scope :filter_by_url, -> (url) { where('url like ?', "%#{url}%") }
+    scope :filter_by_has_feedback, (lambda do |has_feedback|
+        return self.select{|interview| interview.feedback == nil } unless has_feedback.casecmp('true') == 0
+        return self.select{|interview| interview.feedback != nil } if has_feedback.casecmp('true') == 0
+    end)
+    scope :filter_by_total_interviewers, (lambda do |total_interviewers|
+        self.select{|interview| interview.users.count == total_interviewers.to_i }
+    end)
+    scope :filter_by_till, (lambda do |query_time|
+        till = Time.parse(query_time)
+        self.select{|interview| Time.parse(interview.scheduled_time) <= till }
+    end)
+    scope :filter_by_from, (lambda do |query_time|
+        till = Time.parse(query_time)
+        self.select{|interview| Time.parse(interview.scheduled_time) >= till }
+    end)
 
     validates :location, presence: true, length: { minimum: 3, maximum: 40 }
     validates :url, presence: true, length: { minimum: 3, maximum: 500 }

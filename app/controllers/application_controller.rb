@@ -21,6 +21,14 @@ class ApplicationController < ActionController::API
     end
   end
 
+  def filter_records(records, filtering_params)
+    results = records
+    filtering_params.each do |key, value|
+      results = results.public_send("filter_by_#{key}", value) if value.present?
+    end
+    results
+  end
+
   def is_maintainer?
     render json: { error: INVALID_ACCESS_RIGHTS_MESSAGE }, status: :unauthorized unless @current_user.role == ADMIN_USER_ROLE || @current_user.role == MAINTAINER_USER_ROLE
   end

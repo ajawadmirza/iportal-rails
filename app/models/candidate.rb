@@ -1,6 +1,19 @@
 class Candidate < ApplicationRecord
+    include Filterable
+
     belongs_to :user
     has_many :interviews
+
+    scope :filter_by_id, -> (id) { where('id = ?', id) }
+    scope :filter_by_name, -> (name) { where('name like ?', "%#{name}%") }
+    scope :filter_by_cv_url, -> (cv_url) { where('cv_url like ?', "%#{cv_url}%") }
+    scope :filter_by_status, -> (status) { where('status like ?', "%#{status}%") }
+    scope :filter_by_stack, -> (stack) { where('stack like ?', "%#{stack}%") }
+    scope :filter_by_experience_years, -> (experience_years) { where('experience_years = ?', experience_years) }
+    scope :filter_by_referred_by, -> (referred_by) { where('user_id = ?', referred_by) }
+    scope :filter_by_total_interviews, (lambda do |total_interviews| 
+        self.select{|candidate| candidate.interviews.count == total_interviews.to_i }
+    end)
 
     validates :name, presence: true, length: { minimum: 3, maximum: 40 }
     validates :cv_url, presence: true, url: true

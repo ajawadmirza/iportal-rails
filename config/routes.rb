@@ -21,6 +21,7 @@ Rails.application.routes.draw do
     get 'interview', to: 'interview#index'
     post 'interview/:candidate_id', to: 'interview#create'
     delete 'interview/:interview_id', to: 'interview#destroy'
+    patch 'interview/:id', to: 'interview#update'
     post 'interview/:interview_id/add-interviewers', to: 'interview#add_interviewers'
     get 'interview/user', to: 'interview#for_self_user'
     get 'interview/user/:user_id', to: 'interview#for_query_user'

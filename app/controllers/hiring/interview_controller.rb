@@ -19,6 +19,16 @@ class Hiring::InterviewController < ApplicationController
         end
     end
 
+    def update
+        begin
+            interview = Interview.find(params[:id])
+            interview.users = User.where(:id => params[:interviewers], :activated => true) if params[:interviewers]
+            update_object(interview, interview_params.except(:candidate_id))
+        rescue => e
+            render json: { errors: e.message }, status: :internal_server_error
+        end
+    end
+
     def destroy
         begin
             interview = Interview.find(params[:interview_id].to_i)

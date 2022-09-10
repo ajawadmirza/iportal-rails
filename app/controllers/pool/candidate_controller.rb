@@ -9,6 +9,15 @@ class Pool::CandidateController < ApplicationController
         render json: { candidates: @candidates }
     end
 
+    def show
+        begin
+            candidate = Candidate.where(:id => params[:id]).limit(1).first
+            render json: candidate&.with_interviews_interviewers_and_feedback
+        rescue => e
+            render json: { errors: e.message }, status: :internal_server_error
+        end
+    end
+
     def create
         begin
             file_data = params[:cv]

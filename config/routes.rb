@@ -19,6 +19,7 @@ Rails.application.routes.draw do
 
   namespace :hiring do
     get 'interview', to: 'interview#index'
+    get 'interview/:id', to: 'interview#show'
     post 'interview/:candidate_id', to: 'interview#create'
     delete 'interview/:interview_id', to: 'interview#destroy'
     patch 'interview/:id', to: 'interview#update'
@@ -27,6 +28,7 @@ Rails.application.routes.draw do
     get 'interview/user/:user_id', to: 'interview#for_query_user'
 
     get 'feedback', to: 'feedback#index'
+    get 'feedback/:id', to: 'feedback#show'
     post 'feedback/:interview_id', to: 'feedback#create'
     patch 'feedback/:id', to: 'feedback#update'
     delete 'feedback/:feedback_id', to: 'feedback#destroy'

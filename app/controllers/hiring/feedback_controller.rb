@@ -10,6 +10,15 @@ class Hiring::FeedbackController < ApplicationController
         render json: { feedbacks: @feedbacks }
     end
 
+    def show
+        begin
+            feedback = Feedback.where(:id => params[:id]).limit(1).first
+            render json: feedback&.with_interview_and_candidate_details
+        rescue => e
+            render json: { errors: e.message }, status: :internal_server_error
+        end
+    end
+
     def create
         begin
             file_data = params[:file]

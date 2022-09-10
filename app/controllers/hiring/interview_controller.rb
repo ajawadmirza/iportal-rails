@@ -8,6 +8,15 @@ class Hiring::InterviewController < ApplicationController
         render json: { interviews: @interviews }
     end
 
+    def show
+        begin
+            interview = Interview.where(:id => params[:id]).limit(1).first
+            render json: interview&.with_feedback_interviewers_and_candidate
+        rescue => e
+            render json: { errors: e.message }, status: :internal_server_error
+        end
+    end
+
     def create
         begin
             params[:candidate] = Candidate.find(params[:candidate_id].to_i).id

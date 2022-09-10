@@ -70,11 +70,23 @@ class ApplicationController < ActionController::API
       if object.save
         render json: object&.response_hash
       else
-          FileHandler.delete_file(file_key)
+          FileHandler.delete_file(file_key) if file_key
           render json: { errors: object.errors.full_messages }, status: :unprocessable_entity
       end
     rescue => e
       FileHandler.delete_file(file_key) if file_key
+      render json: { errors: e.message }, status: :internal_server_error
+    end
+  end
+
+  def update_object(object, params, file = nil)
+    begin
+      if object.update(params)
+        render json: object&.response_hash
+      else
+          render json: { errors: object.errors.full_messages }, status: :unprocessable_entity
+      end
+    rescue => e
       render json: { errors: e.message }, status: :internal_server_error
     end
   end

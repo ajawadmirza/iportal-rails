@@ -5,7 +5,7 @@ class Profile::UserController < ApplicationController
     end
 
     def other_profile
-        user = User.where(:id => params[:user_id]).limit(1).first
+        user = User.filter_by_id(params[:user_id]).limit(1).first
         render json: user&.response_hash, status: :ok
     end
 

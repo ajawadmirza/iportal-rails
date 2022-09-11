@@ -67,7 +67,7 @@ class Common::QuestionController < ApplicationController
 
     def render_questions_for_user(user_id)
         user_questions = []
-        questions = Question.filter(question_filter_params).where(:user_id => user_id)
+        questions = Question.filter(question_filter_params).filter_by_posted_by(user_id)
         questions.each_entry{ |question| user_questions << question&.response_hash }
         render json: { questions: user_questions }
     end

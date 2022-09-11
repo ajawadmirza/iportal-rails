@@ -10,7 +10,7 @@ class Hiring::InterviewController < ApplicationController
 
     def show
         begin
-            interview = Interview.where(:id => params[:id]).limit(1).first
+            interview = Interview.filter_by_id(params[:id]).limit(1).first
             render json: interview&.with_feedback_interviewers_and_candidate
         rescue => e
             render json: { errors: e.message }, status: :internal_server_error
@@ -21,7 +21,7 @@ class Hiring::InterviewController < ApplicationController
         begin
             params[:candidate] = Candidate.find(params[:candidate_id].to_i).id
             interview = Interview.new(interview_params)
-            interview.users = User.where(:id => params[:interviewers], :activated => true)
+            interview.users = User.having_id_and_activated(params[:interviewers])
             save_object(interview)
         rescue => e
             render json: { errors: e.message }, status: :internal_server_error
@@ -31,7 +31,7 @@ class Hiring::InterviewController < ApplicationController
     def update
         begin
             interview = Interview.find(params[:id])
-            interview.users = User.where(:id => params[:interviewers], :activated => true) if params[:interviewers]
+            interview.users = User.having_id_and_activated(params[:interviewers]) if params[:interviewers]
             update_object(interview, interview_params.except(:candidate_id))
         rescue => e
             render json: { errors: e.message }, status: :internal_server_error
@@ -50,7 +50,7 @@ class Hiring::InterviewController < ApplicationController
     def add_interviewers
         begin
             interview = Interview.find(params[:interview_id].to_i)
-            interview.users = User.where(:id => params[:interviewers], :activated => true)
+            interview.users = User.having_id_and_activated(params[:interviewers])
             if interview.save
                 render json: interview.with_feedback_and_interviewers, status: :ok
             else
@@ -66,7 +66,7 @@ class Hiring::InterviewController < ApplicationController
     end
 
     def for_query_user
-        render_interviews_by_user(User.where(:id => params[:user_id]).limit(1).first)
+        render_interviews_by_user(User.filter_by_id(params[:user_id]).limit(1).first)
     end
 
     private

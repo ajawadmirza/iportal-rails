@@ -12,7 +12,7 @@ class Hiring::FeedbackController < ApplicationController
 
     def show
         begin
-            feedback = Feedback.where(:id => params[:id]).limit(1).first
+            feedback = Feedback.filter_by_id(params[:id]).limit(1).first
             render json: feedback&.with_interview_and_candidate_details
         rescue => e
             render json: { errors: e.message }, status: :internal_server_error
@@ -85,7 +85,7 @@ class Hiring::FeedbackController < ApplicationController
 
     def render_feedback_for_user(user_id)
         user_feedbacks = []
-        feedbacks = Feedback.filter(feedback_filter_params).where(:user_id => user_id)
+        feedbacks = Feedback.filter(feedback_filter_params).filter_by_given_by(user_id)
         feedbacks.each_entry{ |feedback| user_feedbacks << feedback&.with_interview_and_candidate_details }
         render json: { feedbacks: user_feedbacks }
     end

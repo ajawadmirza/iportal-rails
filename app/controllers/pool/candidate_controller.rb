@@ -11,7 +11,7 @@ class Pool::CandidateController < ApplicationController
 
     def show
         begin
-            candidate = Candidate.where(:id => params[:id]).limit(1).first
+            candidate = Candidate.filter_by_id(params[:id]).limit(1).first
             render json: candidate&.with_interviews_interviewers_and_feedback
         rescue => e
             render json: { errors: e.message }, status: :internal_server_error
@@ -86,7 +86,7 @@ class Pool::CandidateController < ApplicationController
 
     def render_candidates_by_user(user_id)
         referrals = []
-        candidates = Candidate.filter(candidate_filter_params).where(:user_id => user_id)
+        candidates = Candidate.filter(candidate_filter_params).filter_by_referred_by(user_id)
         candidates.each_entry{ |candidate| referrals << candidate&.with_interviews_interviewers_and_feedback }
         render json: { candidates: referrals }
     end

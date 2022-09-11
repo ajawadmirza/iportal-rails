@@ -3,6 +3,7 @@ class Question < ApplicationRecord
 
     belongs_to :user
 
+    # query filters
     scope :filter_by_id, -> (id) { where('id = ?', id) }
     scope :filter_by_course, -> (course) { where('course like ?', "%#{course}%") }
     scope :filter_by_description, -> (description) { where('description like ?', "%#{description}%") }

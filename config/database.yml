@@ -22,7 +22,6 @@ production:
   password: <%= ENV['PROD_DATABASE_PASSWORD'] %>
   username: <%= ENV['PROD_DATABASE_USERNAME'] %>
   host: <%= ENV['PROD_DATABASE_HOST'] %>
-
 # For Docker based postgres database configuration
 # development:
 #   <<: *default

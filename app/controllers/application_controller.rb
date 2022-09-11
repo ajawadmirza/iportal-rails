@@ -1,15 +1,15 @@
-require 'json_web_token'
+require "json_web_token"
 
 class ApplicationController < ActionController::API
   before_action :authorize_request
 
   def not_found
-    render json: { error: 'not_found' }
+    render json: { error: "not_found" }
   end
 
   def authorize_request
-    header = request.headers['Authorization']
-    header = header.split(' ').last if header
+    header = request.headers["Authorization"]
+    header = header.split(" ").last if header
 
     begin
       @decoded = JsonWebToken.decode(header)
@@ -32,7 +32,7 @@ class ApplicationController < ActionController::API
   def is_maintainer?
     render json: { error: INVALID_ACCESS_RIGHTS_MESSAGE }, status: :unauthorized unless @current_user.role == ADMIN_USER_ROLE || @current_user.role == MAINTAINER_USER_ROLE
   end
-  
+
   def is_admin?
     render json: { error: INVALID_ACCESS_RIGHTS_MESSAGE }, status: :unauthorized unless @current_user.role == ADMIN_USER_ROLE
   end
@@ -57,7 +57,7 @@ class ApplicationController < ActionController::API
     if permitted
       yield
     else
-      render json: { error: INVALID_ACCESS_RIGHTS_MESSAGE }, status: :unauthorized 
+      render json: { error: INVALID_ACCESS_RIGHTS_MESSAGE }, status: :unauthorized
     end
   end
 
@@ -65,7 +65,7 @@ class ApplicationController < ActionController::API
     begin
       yield
     rescue => e
-        render json: { errors: e.message }, status: :internal_server_error
+      render json: { errors: e.message }, status: :internal_server_error
     end
   end
 
@@ -74,7 +74,7 @@ class ApplicationController < ActionController::API
       result = object.destroy
       if result
         FileHandler.delete_file(file_key) if file_key
-        render json: { message: object.class.name+DELETED_MESSAGE }, status: :ok
+        render json: { message: object.class.name + DELETED_MESSAGE }, status: :ok
       else
         FileHandler.delete_file(file_key) if file_key
         render json: { errors: object.errors.full_messages }, status: :unprocessable_entity
@@ -90,8 +90,8 @@ class ApplicationController < ActionController::API
       if object.save
         render json: object&.response_hash
       else
-          FileHandler.delete_file(file_key) if file_key
-          render json: { errors: object.errors.full_messages }, status: :unprocessable_entity
+        FileHandler.delete_file(file_key) if file_key
+        render json: { errors: object.errors.full_messages }, status: :unprocessable_entity
       end
     rescue => e
       FileHandler.delete_file(file_key) if file_key
@@ -108,5 +108,4 @@ class ApplicationController < ActionController::API
       end
     end
   end
-
 end

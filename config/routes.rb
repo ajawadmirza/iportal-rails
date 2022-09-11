@@ -38,6 +38,7 @@ Rails.application.routes.draw do
 
   namespace :common do
     resources :question
+    resources :lov
     get 'question/user/self', to: "question#posted_by_self_user"
     get 'question/user/:user_id', to: "question#posted_by_query_user"
   end

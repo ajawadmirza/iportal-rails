@@ -19,3 +19,28 @@ feedback2 = Feedback.create(status: 'recommended', remarks: 'good angular skills
 # common data
 question1 = Question.create(course: 'angular', description: 'Explain end-end flow of angular app working', answer: 'runs from app module and goes to components', user: user1)
 question2 = Question.create(course: 'ruby', description: 'How to perform testing in ruby', answer: 'use rspec and minitest gems', user: user2)
+
+# lovs
+lov_roles1 = Lov.create(category: 'roles', name: 'admin', value: '1')
+lov_roles2 = Lov.create(category: 'roles', name: 'platform', value: '2')
+lov_roles3 = Lov.create(category: 'roles', name: 'maintainer', value: '3')
+
+lov_stack1 = Lov.create(category: 'stack', name: 'MEAN', value: 'MEAN')
+lov_stack2 = Lov.create(category: 'stack', name: 'MERN', value: 'MERN')
+lov_stack3 = Lov.create(category: 'stack', name: 'Ruby on Rails', value: 'Ruby on Rails')
+lov_stack4 = Lov.create(category: 'stack', name: '.Net', value: '.Net')
+lov_stack5 = Lov.create(category: 'stack', name: 'Android', value: 'Android')
+lov_stack6 = Lov.create(category: 'stack', name: 'PHP', value: 'PHP')
+lov_stack7 = Lov.create(category: 'stack', name: 'Drupal', value: 'Drupal')
+
+lov_feedback_status1 = Lov.create(category: 'feedback_status', name: 'recommended', value: 'recommended')
+lov_feedback_status2 = Lov.create(category: 'feedback_status', name: 'rejected', value: 'rejected')
+lov_feedback_status3 = Lov.create(category: 'feedback_status', name: 'onhold', value: 'onhold')
+lov_feedback_status4 = Lov.create(category: 'feedback_status', name: 'approved', value: 'approved')
+
+lov_course1 = Lov.create(category: 'course', name: 'angular', value: 'angular')
+lov_course2 = Lov.create(category: 'course', name: 'react', value: 'react')
+lov_course3 = Lov.create(category: 'course', name: 'node', value: 'node')
+lov_course4 = Lov.create(category: 'course', name: 'Ruby on Rails', value: 'Ruby on Rails')
+lov_course5 = Lov.create(category: 'course', name: '.Net', value: '.Net')
+lov_course6 = Lov.create(category: 'course', name: 'javascript', value: 'javascript')

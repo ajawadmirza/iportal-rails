@@ -8,38 +8,26 @@ class Common::QuestionController < ApplicationController
     end
 
     def create
-        begin
+        safe_operation do
             params[:user_id] = @current_user.id
             question = Question.new(question_params)
             save_object(question)
-        rescue => e
-            render json: { errors: e.message }, status: :internal_server_error
         end
     end
 
     def update
-        begin
+        safe_operation do
             question = Question.find(params[:id])
-            if user_permission_for_question?(question)
-                update_object(question, question_params.except(:user_id))
-            else
-                render json: { error: INVALID_ACCESS_RIGHTS_MESSAGE }, status: :unauthorized
-            end
-        rescue => e
-            render json: { errors: e.message }, status: :internal_server_error
+            permission = user_permission_for_question?(question)
+            perform_if_permitted(permission) { update_object(question, question_params.except(:user_id)) }
         end
     end
 
     def destroy
-        begin
+        safe_operation do
             question = Question.find(params[:id])
-            if user_permission_for_question?(question)
-                delete_object(question)
-            else
-                render json: { error: INVALID_ACCESS_RIGHTS_MESSAGE }, status: :unauthorized
-            end
-        rescue => e
-            render json: { errors: e.message }, status: :internal_server_error
+            permission = user_permission_for_question?(question)
+            perform_if_permitted(permission) { delete_object(question) }
         end
     end
 

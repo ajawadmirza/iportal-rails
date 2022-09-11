@@ -50,10 +50,22 @@ class ApplicationController < ActionController::API
   end
 
   def set_user
+    safe_operation { @query_user = User.find(params[:id]) }
+  end
+
+  def perform_if_permitted(permitted)
+    if permitted
+      yield
+    else
+      render json: { error: INVALID_ACCESS_RIGHTS_MESSAGE }, status: :unauthorized 
+    end
+  end
+
+  def safe_operation
     begin
-      @query_user = User.find(params[:id])
+      yield
     rescue => e
-      render json: { error: e.message }, status: :not_found
+        render json: { errors: e.message }, status: :internal_server_error
     end
   end
 
@@ -88,14 +100,13 @@ class ApplicationController < ActionController::API
   end
 
   def update_object(object, params, file = nil)
-    begin
+    safe_operation do
       if object.update(params)
         render json: object&.response_hash
       else
-          render json: { errors: object.errors.full_messages }, status: :unprocessable_entity
+        render json: { errors: object.errors.full_messages }, status: :unprocessable_entity
       end
-    rescue => e
-      render json: { errors: e.message }, status: :internal_server_error
     end
   end
+
 end

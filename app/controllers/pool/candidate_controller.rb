@@ -10,56 +10,41 @@ class Pool::CandidateController < ApplicationController
     end
 
     def show
-        begin
+        safe_operation do
             candidate = Candidate.filter_by_id(params[:id]).limit(1).first
             render json: candidate&.with_interviews_interviewers_and_feedback
-        rescue => e
-            render json: { errors: e.message }, status: :internal_server_error
         end
     end
 
     def create
-        begin
+        safe_operation do
             file_data = params[:cv]
             params = upload_and_set_urls(file_data)
             params = set_candidate_params
             candidate = Candidate.new(candidate_params)
             save_object(candidate, params[:cv_key])
-        rescue => e
-            FileHandler.delete_file(params[:cv_key]) if params[:cv_key]
-            render json: { errors: e.message }, status: :internal_server_error
         end
     end
 
     def update
-        begin
+        safe_operation do
             candidate = Candidate.find(params[:id])
-            if user_permission_for_candidate?(candidate)
+            permission = user_permission_for_candidate?(candidate)
+            perform_if_permitted(permission) do
                 if file_data = params[:cv]
                     FileHandler.delete_file(candidate&.cv_key)
                     params = upload_and_set_urls(file_data)
                 end
                 update_object(candidate, candidate_params.except(:user_id))
-            else
-                render json: { error: INVALID_ACCESS_RIGHTS_MESSAGE }, status: :unauthorized
             end
-        rescue => e
-            FileHandler.delete_file(params[:cv_key]) if params && params[:cv_key]
-            render json: { errors: e.message }, status: :internal_server_error
         end
     end
 
     def destroy
-        begin
+        safe_operation do
             candidate = Candidate.find(params[:id])
-            if user_permission_for_candidate?(candidate)
-                FileHandler.delete_file(candidate&.cv_key)
-                delete_object(candidate)
-            else
-                render json: { error: INVALID_ACCESS_RIGHTS_MESSAGE }, status: :unauthorized
-            end
-        rescue => e
-            render json: { errors: e.message }, status: :internal_server_error
+            permission = user_permission_for_candidate?(candidate)
+            perform_if_permitted(permission) { delete_object(candidate, candidate&.cv_key) }
         end
     end
 

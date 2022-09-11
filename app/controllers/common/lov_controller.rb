@@ -9,29 +9,23 @@ class Common::LovController < ApplicationController
     end
 
     def create
-        begin
+        safe_operation do
             lov = Lov.new(lov_params)
             save_object(lov)
-        rescue => e
-            render json: { errors: e.message }, status: :internal_server_error
         end
     end
 
     def update
-        begin
+        safe_operation do
             lov = Lov.find(params[:id])
             update_object(lov, lov_params)
-        rescue => e
-            render json: { errors: e.message }, status: :internal_server_error
         end
     end
 
     def destroy
-        begin
+        safe_operation do
             lov = Lov.find(params[:id])
             delete_object(lov)
-        rescue => e
-            render json: { errors: e.message }, status: :internal_server_error
         end
     end
 

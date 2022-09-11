@@ -11,61 +11,43 @@ class Hiring::FeedbackController < ApplicationController
     end
 
     def show
-        begin
+        safe_operation do
             feedback = Feedback.filter_by_id(params[:id]).limit(1).first
             render json: feedback&.with_interview_and_candidate_details
-        rescue => e
-            render json: { errors: e.message }, status: :internal_server_error
         end
     end
 
     def create
-        begin
+        safe_operation do
             file_data = params[:file]
             interview = Interview.find(params[:interview_id])
-            if user_permission_for_feedback?(interview)
+            permission = user_permission_for_feedback?(interview)
+            perform_if_permitted(permission) do
                 upload_result = FileHandler.upload_file(file_data[:content_type], file_data[:extension], file_data[:file])
                 params = set_feedback_params(url: upload_result[:url], key: upload_result[:key])
                 feedback = Feedback.new(feedback_params)
                 save_object(feedback, upload_result[:key])
-            else
-                render json: { error: INVALID_ACCESS_RIGHTS_MESSAGE }, status: :unauthorized
             end
-        rescue => e
-            FileHandler.delete_file(upload_result[:key]) if upload_result[:key]
-            render json: { errors: e.message }, status: :internal_server_error
         end
     end
 
     def update
-        begin
+        safe_operation do
             feedback = Feedback.find(params[:id])
-            if user_permission_for_feedback?(feedback.interview)
-                if file_data = params[:file]
-                    FileHandler.delete_file(feedback&.file_key)
-                    upload_result = FileHandler.upload_file(file_data[:content_type], file_data[:extension], file_data[:file])
-                end
+            permission = user_permission_for_feedback?(feedback.interview)
+            perform_if_permitted(permission) do
+                upload_result = FileHandler.update_file_with_new_key(feedback&.file_key, params[:file][:content_type], params[:file][:extension], params[:file][:file]) if params[:file]
                 params = set_feedback_params(upload_result || {})
                 update_object(feedback, feedback_params.except(:interview_id))
-            else
-                render json: { error: INVALID_ACCESS_RIGHTS_MESSAGE }, status: :unauthorized
             end
-        rescue => e
-            FileHandler.delete_file(params[:file_key]) if params && params[:file_key]
-            render json: { errors: e.message }, status: :internal_server_error
         end
     end
 
     def destroy
-        begin
+        safe_operation do
             feedback = Feedback.find(params[:feedback_id].to_i)
-            if user_permission_for_feedback?(feedback.interview)
-                delete_object(feedback, feedback.file_key)
-            else
-                render json: { error: INVALID_ACCESS_RIGHTS_MESSAGE }, status: :unauthorized
-            end
-        rescue => e
-            render json: { errors: e.message }, status: :internal_server_error
+            permission = user_permission_for_feedback?(feedback.interview)
+            perform_if_permitted(permission) { delete_object(feedback, feedback.file_key) }
         end
     end
 

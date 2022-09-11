@@ -1,4 +1,5 @@
 class Profile::UserController < ApplicationController
+    before_action :is_activated?, only: :other_profile
 
     def my_profile
         render json: @current_user&.response_hash, status: :ok

@@ -31,4 +31,13 @@ class FileHandler
             return { error: e.message }
         end
     end
+
+    def self.update_file_with_new_key(key, content_type, extension, file)
+        begin
+            self.delete_file(key)
+            return self.upload_file(content_type, extension, file)
+        rescue => e
+            return { error: e.message }
+        end
+    end
 end

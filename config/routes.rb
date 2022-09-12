@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   namespace :session do
     resources :user
     post "auth/login", to: "authentication#login"
+    get 'confirm-mail', to: "authentication#confirm_mail"
   end
 
   namespace :profile do

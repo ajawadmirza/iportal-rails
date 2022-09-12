@@ -5,8 +5,12 @@ class Profile::AccessController < ApplicationController
   before_action :not_same_user?, only: [:change_user_activation, :change_user_role]
 
   def change_user_activation
-    update_params = { activated: params[:activation].to_s.casecmp("true") == 0 }
-    update_object(@query_user, update_params)
+    if @query_user.verified_email
+      update_params = { activated: params[:activation].to_s.casecmp("true") == 0 }
+      update_object(@query_user, update_params)
+    else
+      render json: { error: UNVERIFIED_EMAIL_MESSAGE }, status: :unprocessable_entity
+    end
   end
 
   def change_user_role

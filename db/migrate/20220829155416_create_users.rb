@@ -6,6 +6,7 @@ class CreateUsers < ActiveRecord::Migration[6.0]
       t.string :role
       t.string :employee_id
       t.boolean :activated
+      t.boolean :verified_email
 
       t.timestamps
     end

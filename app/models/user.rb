@@ -4,6 +4,7 @@ class User < ApplicationRecord
   # query filter scopes
   scope :filter_by_id, ->(id) { where("id = ?", id) }
   scope :filter_by_activated, ->(activated) { where("activated = ?", activated) }
+  scope :filter_by_verified_email, ->(verified_email) { where("verified_email = ?", verified_email) }
   scope :filter_by_email, ->(email) { where("email like ?", "%#{email}%") }
   scope :filter_by_role, ->(role) { where("role = ?", role) }
   scope :filter_by_employee_id, ->(employee_id) { where("employee_id like ?", "%#{employee_id}%") }
@@ -23,6 +24,7 @@ class User < ApplicationRecord
 
   attribute :activated, :boolean, default: false
   attribute :role, :string, default: "2"
+  attribute :verified_email, :boolean, default: false
 
   def response_hash
     {
@@ -31,6 +33,7 @@ class User < ApplicationRecord
       role: self.role,
       employee_id: self.employee_id,
       activated: self.activated,
+      verified_email: self.verified_email
     }
   end
 end

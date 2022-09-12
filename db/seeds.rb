@@ -1,10 +1,10 @@
 # user profiles
-user1 = User.create(email: "test@test.com", password: "test@1234", employee_id: "18151", activated: true)
-user2 = User.create(email: "test1@test.com", password: "test@1234", employee_id: "19023")
-user3 = User.create(email: "test2@test.com", password: "test@1234", employee_id: "15511", activated: true)
+user1 = User.create(email: "test@test.com", password: "test@1234", employee_id: "18151", activated: true, verified_email: true)
+user2 = User.create(email: "test1@test.com", password: "test@1234", employee_id: "19023", verified_email: true)
+user3 = User.create(email: "test2@test.com", password: "test@1234", employee_id: "15511", activated: true, verified_email: true)
 
-user4 = User.create(email: "maintainer1@test.com", password: "test@1234", employee_id: "16093", activated: true, role: "3")
-admin1 = User.create(email: "admin@test.com", password: "test@1234", employee_id: "18511", activated: true, role: "1")
+user4 = User.create(email: "maintainer1@test.com", password: "test@1234", employee_id: "16093", activated: true, role: "3", verified_email: true)
+admin1 = User.create(email: "admin@test.com", password: "test@1234", employee_id: "18511", activated: true, role: "1", verified_email: true)
 
 # candidates
 candidate1 = Candidate.create(name: "James Anderson", cv_url: "https://d.novoresume.com/images/doc/minimalist-resume-template.png", cv_key: "minimalist-resume-template.png", stack: "MEAN", experience_years: "1", user: user1)

@@ -1,3 +1,7 @@
+# Operation Flags
+SEND_EMAIL_STATUS = true
+
+# Controller constants
 SESSION_TIME_OUT = 3600.freeze
 EMAIL_CONFIRMATION_TIME_OUT = 21600.freeze          # 6 hours of expiry
 CHANGE_PASSWORD_TIME_OUT = 900.freeze               # 15 minutes of expiry

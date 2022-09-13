@@ -1,0 +1,30 @@
+<h1>Systems IPortal</h1>
+
+<p>Dear <%= @user.email %></p><br/>
+
+<p>An interview has been scheduled with you by <%= @scheduler.email %></p><br/><br/>
+
+<table style="border: 1px solid black;">
+  <tr>
+    <th>Date/Time</th>
+    <th>Location</th>
+    <th>Candidate Name</th>
+    <th>CV</th>
+    <th>Stack</th>
+    <th>Experience Years</th>
+    <th>Invite Link</th>
+  </tr>
+  <tr>
+    <td><%= @interview[:scheduled_time] %></td>
+    <td><%= @interview[:location] %></td>
+    <td><%= @interview[:candidate][:name] %></td>
+    <td><a href="<%= @interview[:candidate][:cv_url] %>">Cv File</a></td>
+    <td><%= @interview[:candidate][:stack] %></td>
+    <td><%= @interview[:candidate][:experience_years] %></td>
+    <td><a href="<%= @interview[:url] %>">Invitation Link</a></td>
+  </tr>
+</table>
+
+<br/><br/><br/>
+<i>Thanks & Regards,</i><br/>
+<p>Admin, Systems Iportal</p><br/>

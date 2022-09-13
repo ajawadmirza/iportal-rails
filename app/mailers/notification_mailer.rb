@@ -12,4 +12,11 @@ class NotificationMailer < ApplicationMailer
     mail(to: user.email, from: ENV["SMTP_EMAIL"], subject: ACTIVATION_CONFIRMATION_NOTIFICATION_SUBJECT)
   end
 
+  def send_interview_notification_mail_to_interviewers(interviewer, interview, scheduler)
+    @scheduler = scheduler
+    @user = interviewer
+    @interview = interview
+    mail(to: @user.email, from: ENV["SMTP_EMAIL"], subject: INTERVIEW_NOTIFICATION_SUBJECT)
+  end
+
 end

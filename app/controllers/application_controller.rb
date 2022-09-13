@@ -66,6 +66,7 @@ class ApplicationController < ActionController::API
       yield
     rescue => e
       render json: { errors: e.message }, status: :internal_server_error
+      return false
     end
   end
 
@@ -89,13 +90,16 @@ class ApplicationController < ActionController::API
     begin
       if object.save
         render json: object&.response_hash
+        return true
       else
         FileHandler.delete_file(file_key) if file_key
         render json: { errors: object.errors.full_messages }, status: :unprocessable_entity
+        return false
       end
     rescue => e
       FileHandler.delete_file(file_key) if file_key
       render json: { errors: e.message }, status: :internal_server_error
+      return false
     end
   end
 

@@ -24,6 +24,7 @@ EMAIL_CONFIRMATION_SUBJECT = "Systems IPortal | Email Confirmation"
 ACTIVATE_ACCOUNT_NOTIFICATION_SUBJECT = "Systems IPortal | Account Activation Approval"
 ACTIVATION_CONFIRMATION_NOTIFICATION_SUBJECT = "Systems IPortal | Your Account is now activated"
 CHANGE_PASSWORD_SUBJECT = "Systems IPortal | Change Password"
+INTERVIEW_NOTIFICATION_SUBJECT = "Systems IPortal | Interview Scheduled"
 
 # Urls
 FRONTEND_CHANGE_PASSWORD_ENDPOINT="/session/change-password"

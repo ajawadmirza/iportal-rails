@@ -19,16 +19,22 @@ class Hiring::InterviewController < ApplicationController
     safe_operation do
       params[:candidate] = Candidate.find(params[:candidate_id].to_i).id
       interview = Interview.new(interview_params)
-      interview.users = User.having_id_and_activated(params[:interviewers])
-      save_object(interview)
+      interviewers = User.having_id_and_activated(params[:interviewers])
+      interview.users = interviewers unless interviewers&.empty?
+      if save_object(interview)
+        notify_interviewers(interviewers, interview)
+      end
     end
   end
 
   def update
     safe_operation do
       interview = Interview.find(params[:id])
-      interview.users = User.having_id_and_activated(params[:interviewers]) if params[:interviewers]
-      update_object(interview, interview_params.except(:candidate_id))
+      interviewers = User.having_id_and_activated(params[:interviewers] || [])
+      interview.users = interviewers unless interviewers&.empty?
+      if update_object(interview, interview_params.except(:candidate_id))
+        notify_interviewers(interviewers, interview)
+      end
     end
   end
 
@@ -42,9 +48,11 @@ class Hiring::InterviewController < ApplicationController
   def add_interviewers
     safe_operation do
       interview = Interview.find(params[:interview_id].to_i)
-      interview.users = User.having_id_and_activated(params[:interviewers])
+      interviewers = User.having_id_and_activated(params[:interviewers] || [])
+      interview.users = interviewers unless interviewers&.empty?
       if interview.save
         render json: interview.with_feedback_and_interviewers, status: :ok
+        notify_interviewers(interviewers, interview)
       else
         render json: { error: interview.errors.full_messages }, status: :unprocessable_entity
       end
@@ -74,5 +82,11 @@ class Hiring::InterviewController < ApplicationController
 
   def interview_params
     params.permit(:scheduled_time, :location, :url, :user_ids, :candidate_id)
+  end
+
+  def notify_interviewers(interviewers, interview)
+    interviewers.each_entry do |interviewer|
+        NotificationMailer.send_interview_notification_mail_to_interviewers(interviewer, interview&.with_interviewers_and_candidate, @current_user).deliver_later!
+    end
   end
 end

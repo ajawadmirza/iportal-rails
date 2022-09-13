@@ -7,4 +7,9 @@ class NotificationMailer < ApplicationMailer
     mail(to: admin_user.email, from: ENV["SMTP_EMAIL"], subject: ACTIVATE_ACCOUNT_NOTIFICATION_SUBJECT)
   end
 
+  def send_activation_confirmation_mail_to_user(user)
+    @user = user
+    mail(to: user.email, from: ENV["SMTP_EMAIL"], subject: ACTIVATION_CONFIRMATION_NOTIFICATION_SUBJECT)
+  end
+
 end

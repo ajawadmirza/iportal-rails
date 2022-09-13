@@ -34,12 +34,12 @@ class Session::UserController < ApplicationController
     safe_operation do
       if user.save
         render json: user&.response_hash
-        AccountMailer.send_email_confirmation_mail(user).deliver_now!
+        AccountMailer.send_email_confirmation_mail(user).deliver_later!
       elsif email_taken(user)
         existing_user = User.filter_by_email(user.email).limit(1).first
         unless existing_user.verified_email
           update_object(existing_user, user_params.except(:email))
-          AccountMailer.send_email_confirmation_mail(existing_user).deliver_now!
+          AccountMailer.send_email_confirmation_mail(existing_user).deliver_later!
         else
           render json: { errors: ALREADY_TAKEN_AND_ACTIVATED }, status: :unprocessable_entity
         end

@@ -22,9 +22,9 @@ class Session::AuthenticationController < ApplicationController
     safe_operation do
       decoded = JsonWebToken.decode(params[:token])
       existing_user = User.find(decoded[:user_id])
-      if update_object(existing_user, { verified_email: true })
+      if !(existing_user&.verified_email) && update_object(existing_user, { verified_email: true })
         User.activated_admins.each_entry do |admin_user|
-          NotificationMailer.send_activation_notification_mail_for_admins(existing_user, admin_user).deliver_now!
+          NotificationMailer.send_activation_notification_mail_for_admins(existing_user, admin_user).deliver_later!
         end
       end
     end

@@ -19,3 +19,4 @@ UNVERIFIED_EMAIL_MESSAGE = "need email verification to proceed."
 # Email Subjects
 SET_PASSWORD_EMAIL_SUBJECT = "Systems IPortal | Set Password"
 EMAIL_CONFIRMATION_SUBJECT = "Systems IPortal | Email Confirmation"
+ACTIVATE_ACCOUNT_NOTIFICATION_SUBJECT = "Systems IPortal | Account Activation Approval"

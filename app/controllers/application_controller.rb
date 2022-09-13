@@ -103,8 +103,10 @@ class ApplicationController < ActionController::API
     safe_operation do
       if object.update(params)
         render json: object&.response_hash
+        return true
       else
         render json: { errors: object.errors.full_messages }, status: :unprocessable_entity
+        return false
       end
     end
   end

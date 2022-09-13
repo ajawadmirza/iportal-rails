@@ -11,6 +11,7 @@ class User < ApplicationRecord
 
   # custom scopes
   scope :having_id_and_activated, ->(id) { where("id in (?)", id).where("activated = ?", true) }
+  scope :activated_admins, -> { where("role = ?", ADMIN_USER_ROLE).where("activated = ?", true) }
 
   has_secure_password
   has_many :candidates

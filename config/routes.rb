@@ -3,6 +3,8 @@ Rails.application.routes.draw do
     resources :user
     post "auth/login", to: "authentication#login"
     get 'confirm-mail', to: "authentication#confirm_mail"
+    post 'forget-password', to: "authentication#forget_password"
+    post 'change-password', to: "authentication#change_password"
   end
 
   namespace :profile do

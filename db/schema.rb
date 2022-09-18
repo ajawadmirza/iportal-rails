@@ -11,10 +11,7 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.0].define(version: 2022_09_11_083415) do
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
-
-  create_table "active_storage_attachments", force: :cascade do |t|
+  create_table "active_storage_attachments", charset: "latin1", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
     t.bigint "record_id", null: false
@@ -24,7 +21,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_11_083415) do
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
 
-  create_table "active_storage_blobs", force: :cascade do |t|
+  create_table "active_storage_blobs", charset: "latin1", force: :cascade do |t|
     t.string "key", null: false
     t.string "filename", null: false
     t.string "content_type"
@@ -35,76 +32,76 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_11_083415) do
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
-  create_table "candidates", force: :cascade do |t|
+  create_table "candidates", charset: "latin1", force: :cascade do |t|
     t.string "name"
     t.string "cv_url"
     t.string "cv_key"
     t.string "stack"
     t.string "experience_years"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "user_id"
     t.index ["user_id"], name: "index_candidates_on_user_id"
   end
 
-  create_table "feedbacks", force: :cascade do |t|
+  create_table "feedbacks", charset: "latin1", force: :cascade do |t|
     t.string "status"
     t.string "remarks"
     t.string "file_url"
     t.string "file_key"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "interview_id"
     t.integer "user_id"
     t.index ["interview_id"], name: "index_feedbacks_on_interview_id"
     t.index ["user_id"], name: "index_feedbacks_on_user_id"
   end
 
-  create_table "interviews", force: :cascade do |t|
+  create_table "interviews", charset: "latin1", force: :cascade do |t|
     t.string "scheduled_time"
     t.string "location"
     t.string "url"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "candidate_id"
     t.index ["candidate_id"], name: "index_interviews_on_candidate_id"
   end
 
-  create_table "interviews_users", id: false, force: :cascade do |t|
+  create_table "interviews_users", id: false, charset: "latin1", force: :cascade do |t|
     t.bigint "interview_id"
     t.bigint "user_id"
     t.index ["interview_id"], name: "index_interviews_users_on_interview_id"
     t.index ["user_id"], name: "index_interviews_users_on_user_id"
   end
 
-  create_table "lovs", force: :cascade do |t|
+  create_table "lovs", charset: "latin1", force: :cascade do |t|
     t.string "category"
     t.string "value"
     t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
-  create_table "questions", force: :cascade do |t|
+  create_table "questions", charset: "latin1", force: :cascade do |t|
     t.string "course"
     t.string "description"
     t.string "answer"
     t.string "priority"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "user_id"
     t.index ["user_id"], name: "index_questions_on_user_id"
   end
 
-  create_table "users", force: :cascade do |t|
+  create_table "users", charset: "latin1", force: :cascade do |t|
     t.string "email"
     t.string "password_digest"
     t.string "role"
     t.string "employee_id"
     t.boolean "activated"
     t.boolean "verified_email"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
